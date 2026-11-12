@@ -9,17 +9,17 @@ package Modelo;
  * @author Clarissa
  */
 public class Calle {
-    private Intersección destino;
+    private Interseccion destino;
     private double pesoRuta;
     private boolean esDirigida;
     
-    public Calle (Intersección destino, double pesoRuta, boolean esDirigida){
+    public Calle (Interseccion destino, double pesoRuta, boolean esDirigida){
         this.destino = destino;
         this.pesoRuta = pesoRuta;
         this.esDirigida = esDirigida;
     }
     
-    public Intersección getdestino(){
+    public Interseccion getdestino(){
         return destino;
     }
     public double getpesoRuta(){

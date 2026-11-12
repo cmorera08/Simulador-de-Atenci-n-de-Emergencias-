@@ -4,7 +4,7 @@
  */
 package Estructuras;
 
-import Modelo.Intersección;
+import Modelo.Interseccion;
 import Modelo.Calle;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -15,19 +15,19 @@ import java.util.Map;
  * @author Clarissa
  */
 public class Grafo {
-    private Map<Intersección, List<Calle>> listaAdyacencia;
+    private Map<Interseccion, List<Calle>> listaAdyacencia;
     
     public Grafo(){
         this.listaAdyacencia = new HashMap<>();
     }
     
-    public void agregarIntersección(Intersección intersección){
-        if(!listaAdyacencia.containsKey(intersección)){
-            listaAdyacencia.put(intersección, new LinkedList<>());
+    public void agregarIntersección(Interseccion interseccion){
+        if(!listaAdyacencia.containsKey(interseccion)){
+            listaAdyacencia.put(interseccion, new LinkedList<>());
         }
     }
     
-    public void agregarCalle(Intersección origen, Intersección destino, double pesoRuta, boolean esDirigida){
+    public void agregarCalle(Interseccion origen, Interseccion destino, double pesoRuta, boolean esDirigida){
         agregarIntersección(origen);
         agregarIntersección(destino);
         
@@ -37,7 +37,7 @@ public class Grafo {
         }
     }
     
-    public Map<Intersección, List<Calle>> listaAdyacencia(){
+    public Map<Interseccion, List<Calle>> listaAdyacencia(){
         return listaAdyacencia;
     }
 }
