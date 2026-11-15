@@ -1,3 +1,4 @@
+package Interfaz;
 
 import Modelo.Interseccion;
 import Modelo.Calle;
@@ -10,28 +11,28 @@ import java.util.Map;
 
 public class PanelMapa extends JPanel {
 
-    private Grafo grafo;
-    private Map<Interseccion, Point> coordenadas = new HashMap<>();
+    private Grafo Grafo;
+    private Map<Interseccion, Point> Coordenadas = new HashMap<>();
     public PanelMapa() {
         setPreferredSize(new Dimension(600, 350));
         setBackground(Color.WHITE); 
     }
 
     public void setGrafo(Grafo grafo) {
-        this.grafo = grafo;
+        this.Grafo = grafo;
         inicializarCoordenadasAutomaticas();
         repaint();
     }
 
     private void inicializarCoordenadasAutomaticas() {
-        coordenadas.clear();
-        if (grafo == null) return;
+        Coordenadas.clear();
+        if (Grafo == null) return;
 
         int x = 80, y = 80;
         int maxX = 500; 
 
-        for (Interseccion interseccion : grafo.listaAdyacencia().keySet()) {
-            coordenadas.put(interseccion, new Point(x, y));
+        for (Interseccion interseccion : Grafo.listaAdyacencia().keySet()) {
+            Coordenadas.put(interseccion, new Point(x, y));
             x += 150; 
             if (x > maxX) {
                 x = 80;
@@ -44,24 +45,24 @@ public class PanelMapa extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         
-        if (grafo == null) return;
+        if (Grafo == null) return;
 
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        Map<Interseccion, List<Calle>> adyacencia = grafo.listaAdyacencia();
+        Map<Interseccion, List<Calle>> adyacencia = Grafo.listaAdyacencia();
 
       
         g2d.setStroke(new BasicStroke(2));
         for (Map.Entry<Interseccion, List<Calle>> entry : adyacencia.entrySet()) {
             Interseccion origen = entry.getKey();
-            Point pOrigen = coordenadas.get(origen);
+            Point pOrigen = Coordenadas.get(origen);
             
             if (pOrigen == null) continue;
 
             for (Calle calle : entry.getValue()) {
                 Interseccion destino = calle.getdestino();
-                Point pDestino = coordenadas.get(destino);
+                Point pDestino = Coordenadas.get(destino);
 
                 if (pDestino != null) {
                     g2d.setColor(Color.LIGHT_GRAY);
@@ -77,7 +78,7 @@ public class PanelMapa extends JPanel {
 
      
         int radio = 35;
-        for (Map.Entry<Interseccion, Point> entry : coordenadas.entrySet()) {
+        for (Map.Entry<Interseccion, Point> entry : Coordenadas.entrySet()) {
             Interseccion inter = entry.getKey();
             Point p = entry.getValue();
 

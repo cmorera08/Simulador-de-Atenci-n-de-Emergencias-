@@ -1,3 +1,5 @@
+package Interfaz;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -6,6 +8,8 @@
 import Estructuras.Grafo;
 import Modelo.Interseccion;
 import Modelo.Calle;
+import Estructuras.ListaCircularDoble;
+import Modelo.Emergencia;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 /**
@@ -15,20 +19,25 @@ import javax.swing.SwingUtilities;
 public class VentanaPrincipal extends javax.swing.JFrame {
     
     
-     private PanelMapa panelMapaPersonalizado;
+     private PanelMapa PanelMapaPersonalizado;
+     private ListaCircularDoble historialEmergencias = new ListaCircularDoble();
     /**
      * Creates new form Simulador
      */
-    public VentanaPrincipal() {
+    
+     
+     public VentanaPrincipal() {
         initComponents();
-        panelMapaPersonalizado = new PanelMapa();
+        PanelMapaPersonalizado = new PanelMapa();
         jPanel1.setLayout(new java.awt.BorderLayout());
-        jPanel1.add(panelMapaPersonalizado, java.awt.BorderLayout.CENTER);
+        jPanel1.add(PanelMapaPersonalizado, java.awt.BorderLayout.CENTER);
         jPanel1.revalidate();
         jPanel1.repaint();
         cargarGrafoDePrueba();
     }
-private void cargarGrafoDePrueba() {
+     
+     
+     private void cargarGrafoDePrueba() {
         Grafo miCiudad = new Grafo();
         Interseccion h1 = new Interseccion("H1", true, "Hospital");
         Interseccion b1 = new Interseccion("B1", true, "Bomberos");
@@ -37,13 +46,34 @@ private void cargarGrafoDePrueba() {
         miCiudad.agregarCalle(h1, cruce1, 10.0, false);
         miCiudad.agregarCalle(cruce1, b1, 5.5, true);
         miCiudad.agregarCalle(b1, p1, 12.0, false);
-        panelMapaPersonalizado.setGrafo(miCiudad);
+        PanelMapaPersonalizado.setGrafo(miCiudad);
     }
+     
 
-   
-    
-   
-    
+     private void mostrarEmergenciaActual() {
+        Emergencia actual = historialEmergencias.obtenerActual();
+        if (actual != null) {
+            textField1.setText(actual.getId());
+            textField2.setText(actual.getTipo());
+            textField3.setText(actual.getUbicacion());
+            textField4.setText(actual.getSedeSalida());
+            textField5.setText(actual.getSedeLlegada());
+            textField6.setText(actual.getEstado());
+        }
+    }
+     
+     
+     public void accionBotonSiguiente() {
+        historialEmergencias.avanzar();
+        mostrarEmergenciaActual();
+    }
+     
+     
+     public void accionBotonAnterior() {
+        historialEmergencias.retroceder();
+        mostrarEmergenciaActual();
+    }
+        
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -72,62 +102,78 @@ private void cargarGrafoDePrueba() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel2.setBackground(new java.awt.Color(0, 102, 102));
+        jPanel2.setBackground(new java.awt.Color(239, 239, 255));
 
-        botongenerar.setBackground(new java.awt.Color(0, 51, 51));
-        botongenerar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        botongenerar.setText("GENERAR EMERGENCIA");
-        botongenerar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(102, 255, 255), new java.awt.Color(0, 102, 102), new java.awt.Color(0, 0, 0), new java.awt.Color(0, 51, 51)));
+        botongenerar.setBackground(new java.awt.Color(175, 181, 255));
+        botongenerar.setFont(new java.awt.Font("Comfortaa", 3, 14)); // NOI18N
+        botongenerar.setForeground(new java.awt.Color(51, 51, 51));
+        botongenerar.setText("Generar emergencia");
+        botongenerar.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         botongenerar.addActionListener(this::botongenerarActionPerformed);
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
         jPanel1.setName(""); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 585, Short.MAX_VALUE)
+            .addGap(0, 476, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 337, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jPanel3.setBackground(new java.awt.Color(0, 51, 51));
+        jPanel3.setBackground(new java.awt.Color(239, 239, 255));
         jPanel3.setForeground(new java.awt.Color(255, 204, 204));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel1.setText("ID");
+        jLabel1.setFont(new java.awt.Font("Comfortaa", 1, 14)); // NOI18N
+        jLabel1.setText("I.D.");
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel2.setText("TIPO");
+        jLabel2.setFont(new java.awt.Font("Comfortaa", 1, 14)); // NOI18N
+        jLabel2.setText("Tipo de emergencia");
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel3.setText("UBICACIÓN ");
+        jLabel3.setFont(new java.awt.Font("Comfortaa", 1, 14)); // NOI18N
+        jLabel3.setText("Ubicación de la emergencia");
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Comfortaa", 1, 14)); // NOI18N
         jLabel4.setText("SEDE SALIDA");
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Comfortaa", 1, 14)); // NOI18N
         jLabel5.setText("SEDE LLEGADA");
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Comfortaa", 1, 14)); // NOI18N
         jLabel6.setText("ESTADO");
 
-        textField1.setBackground(new java.awt.Color(102, 102, 102));
+        textField1.setBackground(new java.awt.Color(255, 255, 255));
+        textField1.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        textField1.setFont(new java.awt.Font("Comfortaa", 0, 12)); // NOI18N
+        textField1.setForeground(new java.awt.Color(51, 51, 51));
         textField1.addActionListener(this::textField1ActionPerformed);
 
-        textField2.setBackground(new java.awt.Color(102, 102, 102));
+        textField2.setBackground(new java.awt.Color(255, 255, 255));
+        textField2.setFont(new java.awt.Font("Comfortaa", 0, 12)); // NOI18N
+        textField2.setForeground(new java.awt.Color(51, 51, 51));
 
-        textField3.setBackground(new java.awt.Color(102, 102, 102));
+        textField3.setBackground(new java.awt.Color(255, 255, 255));
+        textField3.setFont(new java.awt.Font("Comfortaa", 0, 12)); // NOI18N
+        textField3.setForeground(new java.awt.Color(51, 51, 51));
         textField3.addActionListener(this::textField3ActionPerformed);
 
-        textField4.setBackground(new java.awt.Color(102, 102, 102));
+        textField4.setBackground(new java.awt.Color(255, 255, 255));
+        textField4.setFont(new java.awt.Font("Comfortaa", 0, 12)); // NOI18N
+        textField4.setForeground(new java.awt.Color(51, 51, 51));
         textField4.addActionListener(this::textField4ActionPerformed);
 
-        textField5.setBackground(new java.awt.Color(102, 102, 102));
+        textField5.setBackground(new java.awt.Color(255, 255, 255));
+        textField5.setFont(new java.awt.Font("Comfortaa", 0, 12)); // NOI18N
+        textField5.setForeground(new java.awt.Color(51, 51, 51));
 
-        textField6.setBackground(new java.awt.Color(102, 102, 102));
+        textField6.setBackground(new java.awt.Color(255, 255, 255));
+        textField6.setFont(new java.awt.Font("Comfortaa", 0, 12)); // NOI18N
+        textField6.setForeground(new java.awt.Color(51, 51, 51));
         textField6.addActionListener(this::textField6ActionPerformed);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -151,7 +197,7 @@ private void cargarGrafoDePrueba() {
                     .addComponent(textField4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(textField5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(textField6, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE))
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addContainerGap(89, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -177,7 +223,7 @@ private void cargarGrafoDePrueba() {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
                     .addComponent(textField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 355, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(textField6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -188,28 +234,26 @@ private void cargarGrafoDePrueba() {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41))
-            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(botongenerar))
+                        .addGap(38, 38, 38)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(146, 146, 146)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(151, Short.MAX_VALUE))
+                        .addGap(162, 162, 162)
+                        .addComponent(botongenerar, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addComponent(botongenerar)
-                .addGap(27, 27, 27)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(botongenerar, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(51, 51, 51))
         );
 
@@ -220,7 +264,7 @@ private void cargarGrafoDePrueba() {
             .addGroup(layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -236,6 +280,29 @@ private void cargarGrafoDePrueba() {
     private void botongenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botongenerarActionPerformed
         // TODO add your handling code here:
         JOptionPane.showMessageDialog(this, "Botón de emergencia presionado[cite: 1].");
+        String id = textField1.getText().trim();
+        String tipo = textField2.getText().trim();
+        String ubicacion = textField3.getText().trim();
+        String sedeSalida = textField4.getText().trim();
+        String sedeLlegada = textField5.getText().trim();
+        String estado = textField6.getText().trim();
+        
+        if (id.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor ingrese al menos el ID de la emergencia.");
+            return;
+        }
+        
+        Emergencia nuevaEmergencia = new Emergencia(id, tipo, ubicacion, sedeSalida, sedeLlegada, estado);
+        historialEmergencias.insertar(nuevaEmergencia);
+        
+        JOptionPane.showMessageDialog(this, "¡Emergencia " + id + " registrada exitosamente en la Lista Circular Doble!");
+        
+        textField1.setText("");
+        textField2.setText("");
+        textField3.setText("");
+        textField4.setText("");
+        textField5.setText("");
+        textField6.setText(""); 
     }//GEN-LAST:event_botongenerarActionPerformed
 
     private void textField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField3ActionPerformed
