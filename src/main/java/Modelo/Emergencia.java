@@ -16,6 +16,7 @@ public class Emergencia {
     private String sedeLlegada;
     private String estado;
 
+    
     public Emergencia(String id, String tipo, String ubicacion, String sedeSalida, String sedeLlegada, String estado) {
         this.id = id;
         this.tipo = tipo;
@@ -25,15 +26,16 @@ public class Emergencia {
         this.estado = estado;
     }
 
+    
     public String getId(){
         return id;
     }
     
-    public String getTipo(){ 
+    public String getTipo(){
         return tipo;
     }
     
-    public String getUbicacion(){ 
+    public String getUbicacion(){
         return ubicacion;
     }
     
@@ -47,5 +49,9 @@ public class Emergencia {
     
     public String getEstado(){
         return estado;
+    }
+    
+    public void setEstado(String estado){
+        this.estado = estado;
     }
 }

@@ -10,23 +10,34 @@ package Modelo;
  */
 public class Calle {
     private Interseccion destino;
-    private double pesoRuta;
+    private double pesoRuta; // Distancia o tiempo
     private boolean esDirigida;
+
     
-    public Calle (Interseccion destino, double pesoRuta, boolean esDirigida){
+    public Calle(Interseccion destino, double pesoRuta, boolean esDirigida) {
         this.destino = destino;
         this.pesoRuta = pesoRuta;
         this.esDirigida = esDirigida;
+    }
+
+    
+    public Interseccion getDestino(){
+        return destino;
     }
     
     public Interseccion getdestino(){
         return destino;
     }
+
+    public double getPesoRuta(){
+        return pesoRuta;
+    }
+    
     public double getpesoRuta(){
         return pesoRuta;
     }
-    public boolean getesDirigida(){
+
+    public boolean isEsDirigida(){
         return esDirigida;
     }
-    
 }
