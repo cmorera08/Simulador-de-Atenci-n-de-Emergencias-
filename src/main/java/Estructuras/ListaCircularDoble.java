@@ -20,11 +20,9 @@ public class ListaCircularDoble {
         this.tamaño = 0;
     }
 
-    
     public boolean estaVacia() {
         return cabeza == null;
     }
-
     
     public void insertar(Emergencia emergencia) {
         NodoLista nuevoNodo = new NodoLista(emergencia);
