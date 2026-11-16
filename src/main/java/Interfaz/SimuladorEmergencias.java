@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import Modelo.Emergencia;
 import Estructuras.ListaCircularDoble;
 import javax.swing.JOptionPane;
+import Estructuras.Grafo;
 
 /**
  *
@@ -18,6 +19,7 @@ public class SimuladorEmergencias extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(SimuladorEmergencias.class.getName());
     private ListaCircularDoble historialEmergencias = new ListaCircularDoble();
+    private Estructuras.Grafo grafoCiudad;
     
     
     /**
@@ -131,51 +133,63 @@ public class SimuladorEmergencias extends javax.swing.JFrame {
         botonGenerar.setPreferredSize(new java.awt.Dimension(180, 20));
         botonGenerar.addActionListener(this::botonGenerarActionPerformed);
 
-        jLabel1.setFont(new java.awt.Font("Comfortaa", 1, 12)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Comfortaa", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(78, 54, 32));
-        jLabel1.setText("ID:");
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("I.D.");
 
-        jLabel2.setFont(new java.awt.Font("Comfortaa", 1, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Comfortaa", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(78, 54, 32));
-        jLabel2.setText("Tipo:");
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Tipo");
 
-        jLabel3.setFont(new java.awt.Font("Comfortaa", 1, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Comfortaa", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(78, 54, 32));
-        jLabel3.setText("Ubicación:");
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Ubicación");
 
-        jLabel4.setFont(new java.awt.Font("Comfortaa", 1, 12)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Comfortaa", 1, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(78, 54, 32));
-        jLabel4.setText("Sede de salida:");
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("Sede de salida");
 
-        jLabel5.setFont(new java.awt.Font("Comfortaa", 1, 12)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Comfortaa", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(78, 54, 32));
-        jLabel5.setText("Sede de llegada:");
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("Sede de llegada");
 
-        jLabel6.setFont(new java.awt.Font("Comfortaa", 1, 12)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Comfortaa", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(78, 54, 32));
-        jLabel6.setText("Estado:");
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setText("Estado");
 
         txtID.setEditable(false);
+        txtID.setBackground(new java.awt.Color(248, 250, 236));
         txtID.setCursor(new java.awt.Cursor(java.awt.Cursor.MOVE_CURSOR));
         txtID.addActionListener(this::txtIDActionPerformed);
 
         txtTipo.setEditable(false);
+        txtTipo.setBackground(new java.awt.Color(248, 250, 236));
         txtTipo.setCursor(new java.awt.Cursor(java.awt.Cursor.MOVE_CURSOR));
         txtTipo.addActionListener(this::txtTipoActionPerformed);
 
         txtUbicacion.setEditable(false);
+        txtUbicacion.setBackground(new java.awt.Color(248, 250, 236));
         txtUbicacion.setCursor(new java.awt.Cursor(java.awt.Cursor.MOVE_CURSOR));
         txtUbicacion.addActionListener(this::txtUbicacionActionPerformed);
 
         txtSedeSalida.setEditable(false);
+        txtSedeSalida.setBackground(new java.awt.Color(248, 250, 236));
         txtSedeSalida.setCursor(new java.awt.Cursor(java.awt.Cursor.MOVE_CURSOR));
         txtSedeSalida.addActionListener(this::txtSedeSalidaActionPerformed);
 
         txtSedeLlegada.setEditable(false);
+        txtSedeLlegada.setBackground(new java.awt.Color(248, 250, 236));
         txtSedeLlegada.setCursor(new java.awt.Cursor(java.awt.Cursor.MOVE_CURSOR));
         txtSedeLlegada.addActionListener(this::txtSedeLlegadaActionPerformed);
 
         txtEstado.setEditable(false);
+        txtEstado.setBackground(new java.awt.Color(248, 250, 236));
         txtEstado.setCursor(new java.awt.Cursor(java.awt.Cursor.MOVE_CURSOR));
         txtEstado.addActionListener(this::txtEstadoActionPerformed);
 
@@ -195,66 +209,77 @@ public class SimuladorEmergencias extends javax.swing.JFrame {
         panelDerecho.setLayout(panelDerechoLayout);
         panelDerechoLayout.setHorizontalGroup(
             panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDerechoLayout.createSequentialGroup()
-                .addContainerGap(45, Short.MAX_VALUE)
-                .addComponent(botonGenerar, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45))
             .addGroup(panelDerechoLayout.createSequentialGroup()
                 .addGap(32, 32, 32)
-                .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addComponent(botonAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47)
+                .addComponent(botonSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(21, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDerechoLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDerechoLayout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(126, 126, 126))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDerechoLayout.createSequentialGroup()
+                                .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelDerechoLayout.createSequentialGroup()
+                                        .addGap(79, 79, 79)
+                                        .addComponent(jLabel2))
+                                    .addComponent(botonGenerar, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(45, 45, 45))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDerechoLayout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(98, 98, 98)))
+                        .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtSedeSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtUbicacion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtSedeLlegada, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDerechoLayout.createSequentialGroup()
-                        .addComponent(botonAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(botonSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelDerechoLayout.createSequentialGroup()
-                        .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel1))
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel5))
-                        .addGap(42, 42, 42)
-                        .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSedeLlegada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSedeSalida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtUbicacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel4)
+                        .addGap(82, 82, 82))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDerechoLayout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(78, 78, 78))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDerechoLayout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(110, 110, 110))))
         );
         panelDerechoLayout.setVerticalGroup(
             panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelDerechoLayout.createSequentialGroup()
-                .addGap(29, 29, 29)
+                .addGap(19, 19, 19)
                 .addComponent(botonGenerar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtUbicacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtSedeSalida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtSedeLlegada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtUbicacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
-                .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtSedeSalida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtSedeLlegada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addGap(18, 18, 18)
-                .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(txtEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonAnterior)
                     .addComponent(botonSiguiente))
@@ -271,10 +296,7 @@ public class SimuladorEmergencias extends javax.swing.JFrame {
         );
         panelMapaLayout.setVerticalGroup(
             panelMapaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelMapaLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(panelDerecho, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+            .addComponent(panelDerecho, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
         );
 
         getContentPane().add(panelMapa, java.awt.BorderLayout.PAGE_START);
@@ -307,21 +329,31 @@ public class SimuladorEmergencias extends javax.swing.JFrame {
     }//GEN-LAST:event_txtEstadoActionPerformed
 
     private void botonGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonGenerarActionPerformed
-        
-        String id = "EMG-" + (historialEmergencias.getTamaño() + 1);
-        String tipo = "Incendio Estructural";
-        String ubicacion = "C1";
-        String sedeSalida = "B1";
-        String sedeLlegada = "H1";
-        String estado = "Activa";
 
-        Modelo.Emergencia nuevaEmergencia = new Modelo.Emergencia(id, tipo, ubicacion, sedeSalida, sedeLlegada, estado);
+    Modelo.Interseccion interseccionAleatoria = grafoCiudad.obtenerInterseccionAleatoriaSinSede();
+    
+    if (interseccionAleatoria == null) {
+        javax.swing.JOptionPane.showMessageDialog(this, "No hay intersecciones disponibles para generar más emergencias.");
+        return;
+    }
 
-        // Guardar en la Lista Circular Doble
-        historialEmergencias.insertar(nuevaEmergencia);
+    interseccionAleatoria.setTieneEmergencia(true);
 
-        JOptionPane.showMessageDialog(this, "Emergencia " + id + " generada y registrada en el historial");
-        mostrarEmergenciaActual();
+    String id = "EMG-" + (historialEmergencias.getTamaño() + 1);
+    Modelo.Emergencia nuevaEmergencia = new Modelo.Emergencia(
+        id, 
+        "Incendio Estructural", 
+        interseccionAleatoria.getId(), 
+        "Sede Central", 
+        interseccionAleatoria.getId(), 
+        "Activa"
+    );
+
+
+    historialEmergencias.insertar(nuevaEmergencia);
+    mostrarEmergenciaActual(); // Método que actualiza los txtId, txtTipo, etc.
+    panelMapa.repaint();
+    
     }//GEN-LAST:event_botonGenerarActionPerformed
 
     /**

@@ -42,17 +42,17 @@ public class Grafo {
     }
     
     public Interseccion obtenerInterseccionAleatoriaSinSede() {
-    List<Interseccion> disponibles = new java.util.ArrayList<>();
-    for (Interseccion i : listaAdyacencia.keySet()) {
-        if (!i.isHaySede() && !i.isTieneEmergencia()) {
-            disponibles.add(i);
+        List<Interseccion> disponibles = new java.util.ArrayList<>();
+        for (Interseccion i : listaAdyacencia.keySet()) {
+            if (!i.isHaySede() && !i.isTieneEmergencia()) {
+                disponibles.add(i);
+            }
         }
+        if (disponibles.isEmpty()) {
+            return null;
+        }
+        java.util.Random random = new java.util.Random();
+        int index = random.nextInt(disponibles.size());
+        return disponibles.get(index);
     }
-    if (disponibles.isEmpty()) {
-        return null;
-    }
-    java.util.Random random = new java.util.Random();
-    int index = random.nextInt(disponibles.size());
-    return disponibles.get(index);
-}
 }
