@@ -11,6 +11,7 @@ import Estructuras.ListaCircularDoble;
 import javax.swing.JOptionPane;
 import Estructuras.Grafo;
 
+
 /**
  *
  * @author Clarissa
@@ -20,6 +21,8 @@ public class SimuladorEmergencias extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(SimuladorEmergencias.class.getName());
     private ListaCircularDoble historialEmergencias = new ListaCircularDoble();
     private Estructuras.Grafo grafoCiudad;
+    private int emergenciasActivas = 0;
+    private MapaCiudad mapa;
     
     
     /**
@@ -28,41 +31,66 @@ public class SimuladorEmergencias extends javax.swing.JFrame {
     public SimuladorEmergencias() {
         initComponents();
         
-        esteticaBotones(botonGenerar);
-        esteticaBotones(botonAnterior);
-        esteticaBotones(botonSiguiente);
+        grafoCiudad = new Estructuras.Grafo();
+    
+        Modelo.Interseccion h1 = new Modelo.Interseccion("H1", true, "Hospital");
+        Modelo.Interseccion b1 = new Modelo.Interseccion("B1", true, "Bomberos");
+        Modelo.Interseccion p1 = new Modelo.Interseccion("P1", true, "Policía");
+        Modelo.Interseccion cruce1 = new Modelo.Interseccion("C1", false, "");
+        Modelo.Interseccion cruce2 = new Modelo.Interseccion("C2", false, "");
+        
+        grafoCiudad.agregarCalle(h1, cruce1, 10.0, false);
+        grafoCiudad.agregarCalle(cruce1, b1, 5.5, true);
+        grafoCiudad.agregarCalle(b1, p1, 12.0, false);
+        grafoCiudad.agregarCalle(h1, cruce2, 7.0, false);
+        grafoCiudad.agregarCalle(cruce2, p1, 8.5, false);
+        
+        
+        getContentPane().removeAll();
+        getContentPane().setLayout(new java.awt.BorderLayout());
+        
+        panelMapa.removeAll();
+        panelMapa.setLayout(new java.awt.BorderLayout());
+        mapa = new MapaCiudad();
+        mapa.setGrafo(grafoCiudad);
+        panelMapa.add(mapa, java.awt.BorderLayout.CENTER);
+        
+        getContentPane().add(panelMapa, java.awt.BorderLayout.CENTER);
+        getContentPane().add(panelDerecho, java.awt.BorderLayout.EAST);
+        
+        esteticaBotonesClaros(botonGenerar);
+        esteticaBotonesClaros(botonAnterior);
+        esteticaBotonesClaros(botonSiguiente);
+
+        this.setSize(880, 480);
+        this.setLocationRelativeTo(null);
     }    
         
         
-        private void esteticaBotones(javax.swing.JButton boton){
-            
-            try {
-            boton.setUI(new javax.swing.plaf.metal.MetalButtonUI());
-            } catch (Exception e) {
-                e.printStackTrace();
+    private void esteticaBotonesClaros(javax.swing.JButton boton){
+        final java.awt.Color colorNormal = new java.awt.Color(252, 249, 236);
+        final java.awt.Color colorPresionado = new java.awt.Color(220, 212, 202);
+        
+        boton.setOpaque(false);
+        boton.setContentAreaFilled(false);
+        boton.setFocusPainted(false);
+        boton.setFocusable(false);
+        boton.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        boton.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createLineBorder(new java.awt.Color(175, 170, 162), 1),
+            javax.swing.BorderFactory.createEmptyBorder(4, 4, 4, 4) // Margen reducido para que quepa el texto completo
+        ));
+
+        boton.setUI(new javax.swing.plaf.basic.BasicButtonUI() {
+            @Override
+            public void paint(java.awt.Graphics g, javax.swing.JComponent c) {
+                javax.swing.AbstractButton b = (javax.swing.AbstractButton) c;
+                g.setColor(b.getModel().isPressed() ? colorPresionado : colorNormal);
+                g.fillRect(0, 0, c.getWidth(), c.getHeight());
+                super.paint(g, c);
             }
-
-            boton.setOpaque(true);
-            boton.setBackground(new java.awt.Color(252, 249, 236)); // Cambia estos valores RGB a tu tono beige preferido
-            boton.setFocusPainted(false);
-
-
-
-            java.awt.Color colorOriginal = new java.awt.Color(245, 235, 220);
-            java.awt.Color colorPresionado = new java.awt.Color(220, 210, 195);
-            boton.addMouseListener(new java.awt.event.MouseAdapter() {
-
-                @Override
-                public void mousePressed(java.awt.event.MouseEvent evt) {
-                boton.setBackground(colorPresionado); // Se oscurece al presionar
-                }
-
-                @Override
-                public void mouseReleased(java.awt.event.MouseEvent evt) {
-                    boton.setBackground(colorOriginal); // Regresa a su color al soltar
-                }
-            });
-        }
+        });
+    }
         
         
         private void mostrarEmergenciaActual() {
@@ -198,12 +226,16 @@ public class SimuladorEmergencias extends javax.swing.JFrame {
         botonAnterior.setForeground(new java.awt.Color(78, 54, 32));
         botonAnterior.setText("Anterior");
         botonAnterior.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(177, 211, 185), new java.awt.Color(177, 211, 185), null, null));
+        botonAnterior.setFocusPainted(false);
+        botonAnterior.addActionListener(this::botonAnteriorActionPerformed);
 
         botonSiguiente.setBackground(new java.awt.Color(252, 249, 236));
         botonSiguiente.setFont(new java.awt.Font("Comfortaa", 1, 14)); // NOI18N
         botonSiguiente.setForeground(new java.awt.Color(78, 54, 32));
         botonSiguiente.setText("Siguiente");
         botonSiguiente.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(177, 211, 185), new java.awt.Color(177, 211, 185), null, null));
+        botonSiguiente.setFocusPainted(false);
+        botonSiguiente.addActionListener(this::botonSiguienteActionPerformed);
 
         javax.swing.GroupLayout panelDerechoLayout = new javax.swing.GroupLayout(panelDerecho);
         panelDerecho.setLayout(panelDerechoLayout);
@@ -331,30 +363,113 @@ public class SimuladorEmergencias extends javax.swing.JFrame {
     private void botonGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonGenerarActionPerformed
 
     Modelo.Interseccion interseccionAleatoria = grafoCiudad.obtenerInterseccionAleatoriaSinSede();
-    
-    if (interseccionAleatoria == null) {
-        javax.swing.JOptionPane.showMessageDialog(this, "No hay intersecciones disponibles para generar más emergencias.");
-        return;
-    }
+    Modelo.Interseccion lugarIncidente = grafoCiudad.obtenerInterseccionAleatoriaSinSede();
+        
+        if (lugarIncidente == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "No hay intersecciones libres disponibles.");
+            return;
+        }
 
-    interseccionAleatoria.setTieneEmergencia(true);
+        String[] tipos = {"Incendio Estructural", "Emergencia Médica", "Asalto / Seguridad"};
+        String[] sedes = {"Bomberos", "Hospital", "Policía"};
+        int azar = new java.util.Random().nextInt(tipos.length);
+        String tipoEmergencia = tipos[azar];
+        String sedeNecesaria = sedes[azar];
 
-    String id = "EMG-" + (historialEmergencias.getTamaño() + 1);
-    Modelo.Emergencia nuevaEmergencia = new Modelo.Emergencia(
-        id, 
-        "Incendio Estructural", 
-        interseccionAleatoria.getId(), 
-        "Sede Central", 
-        interseccionAleatoria.getId(), 
-        "Activa"
-    );
+        
+        Modelo.Interseccion sedeOrigen = Algoritmos.Dijkstra.encontrarSedeMasCercana(grafoCiudad, lugarIncidente, sedeNecesaria);
+        
+        if (sedeOrigen == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "No hay ruta disponible desde ninguna sede de " + sedeNecesaria);
+            return;
+        }
+
+        java.util.List<Modelo.Interseccion> rutaIda = Algoritmos.Dijkstra.calcularRutaMasCortas(grafoCiudad, sedeOrigen, lugarIncidente);
+        java.util.List<Modelo.Interseccion> rutaRegreso = Algoritmos.Dijkstra.calcularRutaMasCortas(grafoCiudad, lugarIncidente, sedeOrigen);
+
+       
+        emergenciasActivas++;
+        lugarIncidente.setTieneEmergencia(true);
+        String id = "EMG-" + (historialEmergencias.getTamaño() + 1);
+
+        Modelo.Emergencia nueva = new Modelo.Emergencia(
+            id, tipoEmergencia, lugarIncidente.getId(), 
+            sedeOrigen.getId(), sedeOrigen.getId(), "En camino"
+        );
+        historialEmergencias.insertar(nueva);
+        mostrarEmergenciaActual();
+        panelMapa.repaint();
+
+       
+       java.awt.Color colorUnidad = azar == 0 ? new java.awt.Color(249, 115, 22) :
+                                     azar == 1 ? new java.awt.Color(244, 63, 94) :
+                                                 new java.awt.Color(59, 130, 246);
+
+        new Thread(() -> {
+            try {
+                // 1. Animación suave de IDA (tramo por tramo)
+                for (int i = 0; i < rutaIda.size() - 1; i++) {
+                    Modelo.Interseccion actual = rutaIda.get(i);
+                    Modelo.Interseccion siguiente = rutaIda.get(i + 1);
+                    for (int paso = 0; paso <= 20; paso++) {
+                        double progreso = paso / 20.0;
+                        javax.swing.SwingUtilities.invokeLater(() ->
+                            mapa.actualizarPosicionUnidad(id, actual, siguiente, progreso, colorUnidad, rutaIda)
+                        );
+                        Thread.sleep(45);
+                    }
+                }
 
 
-    historialEmergencias.insertar(nuevaEmergencia);
-    mostrarEmergenciaActual(); // Método que actualiza los txtId, txtTipo, etc.
-    panelMapa.repaint();
-    
+                nueva.setEstado("Atendiendo en sitio");
+                javax.swing.SwingUtilities.invokeLater(this::mostrarEmergenciaActual);
+                Thread.sleep(1500);
+
+
+                nueva.setEstado("Regresando a sede");
+                lugarIncidente.setTieneEmergencia(false);
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    mostrarEmergenciaActual();
+                    mapa.repaint();
+                });
+
+                for (int i = 0; i < rutaRegreso.size() - 1; i++) {
+                    Modelo.Interseccion actual = rutaRegreso.get(i);
+                    Modelo.Interseccion siguiente = rutaRegreso.get(i + 1);
+                    for (int paso = 0; paso <= 20; paso++) {
+                        double progreso = paso / 20.0;
+                        javax.swing.SwingUtilities.invokeLater(() ->
+                            mapa.actualizarPosicionUnidad(id, actual, siguiente, progreso, colorUnidad, rutaRegreso)
+                        );
+                        Thread.sleep(45);
+                    }
+                }
+
+
+                nueva.setEstado("Atendida");
+                emergenciasActivas--;
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    mapa.removerUnidad(id);
+                    mostrarEmergenciaActual();
+                });
+
+            } catch (InterruptedException ex) {
+                emergenciasActivas--;
+                mapa.removerUnidad(id);
+                Thread.currentThread().interrupt();
+            }
+        }).start();
     }//GEN-LAST:event_botonGenerarActionPerformed
+
+    private void botonAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAnteriorActionPerformed
+        historialEmergencias.retroceder();
+        mostrarEmergenciaActual();
+    }//GEN-LAST:event_botonAnteriorActionPerformed
+
+    private void botonSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSiguienteActionPerformed
+        historialEmergencias.avanzar();
+        mostrarEmergenciaActual();
+    }//GEN-LAST:event_botonSiguienteActionPerformed
 
     /**
      * @param args the command line arguments

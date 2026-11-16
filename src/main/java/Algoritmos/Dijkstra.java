@@ -69,4 +69,42 @@ public class Dijkstra {
         }
         return ruta;
     }
+        
+    public static double calcularCostoRuta(Grafo grafo, List<Interseccion> ruta) {
+        if (ruta == null || ruta.size() < 2) return Double.MAX_VALUE;
+        double costoTotal = 0.0;
+        Map<Interseccion, List<Calle>> adyacencia = grafo.getListaAdyacencia();
+
+        for (int i = 0; i < ruta.size() - 1; i++) {
+            Interseccion actual = ruta.get(i);
+            Interseccion siguiente = ruta.get(i + 1);
+            for (Calle c : adyacencia.get(actual)) {
+                if (c.getDestino().equals(siguiente)) {
+                    costoTotal += c.getPesoRuta();
+                    break;
+                }
+            }
+        }
+        return costoTotal;
+    }
+
+    
+    public static Interseccion encontrarSedeMasCercana(Grafo grafo, Interseccion destino, String tipoSedeRequerida) {
+        Interseccion mejorSede = null;
+        double menorCosto = Double.MAX_VALUE;
+
+        for (Interseccion nodo : grafo.getListaAdyacencia().keySet()) {
+            if (nodo.isHaySede() && nodo.getTipoSede().equalsIgnoreCase(tipoSedeRequerida)) {
+                List<Interseccion> ruta = calcularRutaMasCortas(grafo, nodo, destino);
+                if (!ruta.isEmpty()) {
+                    double costo = calcularCostoRuta(grafo, ruta);
+                    if (costo < menorCosto) {
+                        menorCosto = costo;
+                        mejorSede = nodo;
+                    }
+                }
+            }
+        }
+        return mejorSede;
+    }
 }
